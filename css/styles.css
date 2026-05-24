@@ -1,0 +1,250 @@
+/* ==========================================
+   VARIABLES Y CONFIGURACIÓN GLOBAL
+   ========================================== */
+:root {
+    --bg-dark-deep: #0b0f19;    
+    --bg-dark-card: #171e2e;    
+    --border-color: #242f47;    
+    --text-main: #f3f4f6;       
+    --text-muted: #9ca3af;      
+    
+    --crypto-green: #10b981;    
+    --crypto-red: #f43f5e;      
+    --crypto-blue: #3b82f6;     
+    --crypto-purple: #a855f7;
+    
+    --radius: 12px;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+body {
+    background-color: var(--bg-dark-deep);
+    color: var(--text-main);
+    padding-bottom: 2rem;
+}
+
+/* ==========================================
+   BARRA DE NAVEGACIÓN
+   ========================================== */
+.crypto-nav {
+    background-color: var(--bg-dark-card);
+    border-bottom: 1px solid var(--border-color);
+    padding: 1rem 2rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.crypto-nav .logo { font-size: 1.3rem; font-weight: 700; letter-spacing: 0.5px; }
+.crypto-nav .user-status {
+    background-color: rgba(16, 185, 129, 0.1);
+    color: var(--crypto-green);
+    padding: 0.4rem 0.8rem;
+    border-radius: 20px;
+    font-size: 0.85rem;
+    font-weight: 600;
+}
+.crypto-nav .dot { margin-right: 4px; }
+
+/* ==========================================
+   CONTENEDOR Y DASHCARDS
+   ========================================== */
+.dashboard-container {
+    max-width: 1200px;
+    margin: 2rem auto;
+    padding: 0 1rem;
+}
+
+.balance-cards {
+    display: flex;
+    gap: 1.5rem;
+    margin-bottom: 2rem;
+}
+
+.card {
+    flex: 1;
+    background-color: var(--bg-dark-card);
+    border: 1px solid var(--border-color);
+    padding: 1.5rem;
+    border-radius: var(--radius);
+    transition: transform 0.2s;
+}
+.card:hover { transform: translateY(-3px); }
+.card h4 {
+    font-size: 0.85rem;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    margin-bottom: 0.5rem;
+    letter-spacing: 0.5px;
+}
+.card span { font-size: 2rem; font-weight: 700; }
+
+.card-balance span { color: var(--text-main); }
+.card-balance { border-top: 4px solid var(--crypto-blue); }
+.card-ingresos span { color: var(--crypto-green); }
+.card-ingresos { border-top: 4px solid var(--crypto-green); }
+.card-gastos span { color: var(--crypto-red); }
+.card-gastos { border-top: 4px solid var(--crypto-red); }
+
+/* ==========================================
+   SISTEMA DE PESTAÑAS (TABS)
+   ========================================== */
+.tabs-nav {
+    display: flex;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+    border-bottom: 1px solid var(--border-color);
+    padding-bottom: 0.5rem;
+}
+
+.btn-tab {
+    background: none;
+    border: none;
+    color: var(--text-muted);
+    font-size: 1.1rem;
+    font-weight: 600;
+    padding: 0.5rem 1rem;
+    cursor: pointer;
+    transition: all 0.2s;
+    position: relative;
+}
+.btn-tab:hover { color: var(--text-main); }
+.btn-tab.active { color: var(--crypto-blue); }
+.btn-tab.active::after {
+    content: '';
+    position: absolute;
+    bottom: -9px;
+    left: 0;
+    width: 100%;
+    height: 3px;
+    background-color: var(--crypto-blue);
+    border-radius: 2px;
+}
+
+.tab-content { display: none; }
+.tab-content.active { display: block; }
+
+/* ESTRUCTURAS FLEXIBLES REUTILIZABLES */
+.panel-row {
+    display: flex;
+    gap: 2rem;
+    flex-wrap: wrap;
+}
+.panel-column-aside {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    min-width: 300px;
+}
+
+/* ==========================================
+   PANEL CENTRAL Y FORMULARIOS
+   ========================================== */
+.panel-section {
+    background-color: var(--bg-dark-card);
+    border: 1px solid var(--border-color);
+    padding: 2rem;
+    border-radius: var(--radius);
+}
+.form-panel { flex: 1; min-width: 300px; }
+
+.panel-section h3 { font-size: 1.3rem; margin-bottom: 0.25rem; }
+.panel-section p { color: var(--text-muted); font-size: 0.9rem; margin-bottom: 1.5rem; }
+
+.form-group { margin-bottom: 1.25rem; }
+.form-group label { display: block; font-size: 0.85rem; color: var(--text-muted); margin-bottom: 0.5rem; }
+.form-group input, .form-group select {
+    width: 100%;
+    background-color: var(--bg-dark-deep);
+    border: 1px solid var(--border-color);
+    color: var(--text-main);
+    padding: 0.75rem 1rem;
+    border-radius: 6px;
+    font-size: 1rem;
+    outline: none;
+    transition: border-color 0.2s;
+}
+.form-group input:focus, .form-group select:focus { border-color: var(--crypto-blue); }
+
+.btn-crypto {
+    width: 100%;
+    background: linear-gradient(135deg, #3b82f6, #1d4ed8);
+    color: white;
+    border: none;
+    padding: 0.85rem;
+    border-radius: 6px;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: opacity 0.2s;
+    margin-top: 0.5rem;
+}
+.btn-crypto:hover { opacity: 0.9; }
+
+/* ==========================================
+   HISTORIAL Y FILTROS
+   ========================================== */
+.filter-container {
+    margin-bottom: 1.25rem;
+    display: flex;
+    gap: 0.5rem;
+}
+.btn-filter {
+    background-color: var(--bg-dark-deep);
+    border: 1px solid var(--border-color);
+    color: var(--text-muted);
+    padding: 0.5rem 1rem;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 0.85rem;
+    font-weight: 600;
+    transition: all 0.2s;
+}
+.btn-filter:hover { border-color: var(--crypto-blue); color: var(--text-main); }
+.btn-filter.active { background-color: var(--crypto-blue); border-color: var(--crypto-blue); color: white; }
+
+.history-list { display: flex; flex-direction: column; gap: 0.75rem; max-height: 400px; overflow-y: auto; padding-right: 5px; }
+.empty-state { text-align: center; color: var(--text-muted); padding: 2rem 0; font-style: italic; }
+
+.item-transaction {
+    background-color: var(--bg-dark-deep);
+    border: 1px solid var(--border-color);
+    padding: 1rem;
+    border-radius: 8px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.item-info h4 { font-size: 1rem; font-weight: 600; margin-bottom: 0.2rem; }
+.item-amount-action { display: flex; align-items: center; gap: 1rem; }
+.item-amount { font-weight: 700; font-size: 1.1rem; }
+
+.type-ingreso { color: var(--crypto-green); }
+.type-gasto { color: var(--crypto-red); }
+
+.btn-delete-trans { background: none; border: none; color: var(--text-muted); cursor: pointer; font-size: 1.1rem; transition: color 0.2s; }
+.btn-delete-trans:hover { color: var(--crypto-red); }
+
+/* ==========================================
+   CONTENEDORES DINÁMICOS Y TOASTS
+   ========================================== */
+.status-list-container {
+    margin-top: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+.status-list-container.font-small { gap: 0.8rem; font-size: 0.85rem; }
+
+.toast-container { position: fixed; bottom: 20px; right: 20px; display: flex; flex-direction: column; gap: 10px; z-index: 1000; }
+.toast { background-color: #171e2e; color: white; padding: 1rem 1.5rem; border-radius: 8px; box-shadow: 0 10px 15px -3px rgba(0,0,0,0.3); font-size: 0.95rem; display: flex; align-items: center; gap: 0.5rem; min-width: 280px; border-left: 4px solid var(--crypto-blue); }
+.toast-success { border-left-color: var(--crypto-green); }
+.toast-danger { border-left-color: var(--crypto-red); }
+.toast-warning { border-left-color: #f59e0b !important; }

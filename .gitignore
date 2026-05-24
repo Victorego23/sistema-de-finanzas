@@ -1,0 +1,55 @@
+# Archivos a ignorar en Git para TommyFinance
+
+# Archivos del sistema operativo
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# IDEs y editores
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.sublime-project
+.sublime-workspace
+*.iml
+
+# Ambiente local
+.env
+.env.local
+node_modules/
+package-lock.json
+yarn.lock
+
+# Archivos de respaldo (descargas locales)
+*.json.bak
+TommyFinance_Backup_*.json
+
+# Logs
+logs/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Directorios temporales
+tmp/
+temp/
+dist/
+build/
+
+# Archivos del navegador
+.cache
+.history
+
+# Archivos específicos del usuario
+user-preferences.json
+
+# Documentación generada
+docs/
+site/
