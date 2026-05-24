@@ -1,19 +1,15 @@
-/* ==========================================
-   VARIABLES Y CONFIGURACIÓN GLOBAL
-   ========================================== */
+/* Paleta de colores Oscuro Neón Profesional */
 :root {
-    --bg-dark-deep: #0b0f19;    
-    --bg-dark-card: #171e2e;    
-    --border-color: #242f47;    
-    --text-main: #f3f4f6;       
-    --text-muted: #9ca3af;      
-    
-    --crypto-green: #10b981;    
-    --crypto-red: #f43f5e;      
-    --crypto-blue: #3b82f6;     
-    --crypto-purple: #a855f7;
-    
-    --radius: 12px;
+    --bg-main: #121216;
+    --bg-card: #1e1e24;
+    --bg-input: #252530;
+    --color-text: #ffffff;
+    --color-muted: #a4b0be;
+    --neon-blue: #00d2d3;
+    --neon-green: #2ed573;
+    --neon-red: #ff4757;
+    --neon-purple: #9b5de5;
+    --neon-yellow: #ffa502;
 }
 
 * {
@@ -24,227 +20,265 @@
 }
 
 body {
-    background-color: var(--bg-dark-deep);
-    color: var(--text-main);
-    padding-bottom: 2rem;
+    background-color: var(--bg-main);
+    color: var(--color-text);
+    padding-bottom: 40px;
 }
 
-/* ==========================================
-   BARRA DE NAVEGACIÓN
-   ========================================== */
-.crypto-nav {
-    background-color: var(--bg-dark-card);
-    border-bottom: 1px solid var(--border-color);
-    padding: 1rem 2rem;
+header {
+    background-color: var(--bg-card);
+    padding: 15px 20px;
+    border-bottom: 2px solid #2d2d3a;
+    margin-bottom: 25px;
+}
+
+.logo-container {
     display: flex;
-    justify-content: space-between;
     align-items: center;
+    justify-content: space-between;
+    max-width: 1200px;
+    margin: 0 auto;
 }
 
-.crypto-nav .logo { font-size: 1.3rem; font-weight: 700; letter-spacing: 0.5px; }
-.crypto-nav .user-status {
-    background-color: rgba(16, 185, 129, 0.1);
-    color: var(--crypto-green);
-    padding: 0.4rem 0.8rem;
+.badge {
+    background-color: #2d2d3a;
+    color: var(--neon-blue);
+    padding: 5px 12px;
     border-radius: 20px;
     font-size: 0.85rem;
-    font-weight: 600;
-}
-.crypto-nav .dot { margin-right: 4px; }
-
-/* ==========================================
-   CONTENEDOR Y DASHCARDS
-   ========================================== */
-.dashboard-container {
-    max-width: 1200px;
-    margin: 2rem auto;
-    padding: 0 1rem;
+    font-weight: bold;
 }
 
+.container {
+    max-width: 600px; /* Ajuste para emular vista móvil scannable */
+    margin: 0 auto;
+    padding: 0 15px;
+}
+
+/* Tarjetas de Balance */
 .balance-cards {
-    display: flex;
-    gap: 1.5rem;
-    margin-bottom: 2rem;
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 12px;
+    margin-bottom: 20px;
 }
 
 .card {
-    flex: 1;
-    background-color: var(--bg-dark-card);
-    border: 1px solid var(--border-color);
-    padding: 1.5rem;
-    border-radius: var(--radius);
-    transition: transform 0.2s;
+    background-color: var(--bg-card);
+    border-radius: 12px;
+    padding: 15px;
+    border: 1px solid #2d2d3a;
 }
-.card:hover { transform: translateY(-3px); }
+
 .card h4 {
-    font-size: 0.85rem;
-    color: var(--text-muted);
-    text-transform: uppercase;
-    margin-bottom: 0.5rem;
-    letter-spacing: 0.5px;
+    font-size: 0.8rem;
+    color: var(--color-muted);
+    letter-spacing: 1px;
+    margin-bottom: 5px;
 }
-.card span { font-size: 2rem; font-weight: 700; }
 
-.card-balance span { color: var(--text-main); }
-.card-balance { border-top: 4px solid var(--crypto-blue); }
-.card-ingresos span { color: var(--crypto-green); }
-.card-ingresos { border-top: 4px solid var(--crypto-green); }
-.card-gastos span { color: var(--crypto-red); }
-.card-gastos { border-top: 4px solid var(--crypto-red); }
+.card h2 {
+    font-size: 1.8rem;
+}
 
-/* ==========================================
-   SISTEMA DE PESTAÑAS (TABS)
-   ========================================== */
-.tabs-nav {
+.balance-neto { border-left: 5px solid var(--neon-blue); }
+.total-ingresos { border-left: 5px solid var(--neon-green); }
+.total-gastos { border-left: 5px solid var(--neon-red); }
+
+.dot { font-size: 0.7rem; vertical-align: middle; margin-left: 5px; }
+.green { color: var(--neon-green); }
+.red { color: var(--neon-red); }
+
+/* Navegación por pestañas */
+.nav-tabs {
     display: flex;
-    gap: 1rem;
-    margin-bottom: 1.5rem;
-    border-bottom: 1px solid var(--border-color);
-    padding-bottom: 0.5rem;
+    gap: 8px;
+    margin-bottom: 20px;
 }
 
-.btn-tab {
-    background: none;
-    border: none;
-    color: var(--text-muted);
-    font-size: 1.1rem;
-    font-weight: 600;
-    padding: 0.5rem 1rem;
-    cursor: pointer;
-    transition: all 0.2s;
-    position: relative;
-}
-.btn-tab:hover { color: var(--text-main); }
-.btn-tab.active { color: var(--crypto-blue); }
-.btn-tab.active::after {
-    content: '';
-    position: absolute;
-    bottom: -9px;
-    left: 0;
-    width: 100%;
-    height: 3px;
-    background-color: var(--crypto-blue);
-    border-radius: 2px;
-}
-
-.tab-content { display: none; }
-.tab-content.active { display: block; }
-
-/* ESTRUCTURAS FLEXIBLES REUTILIZABLES */
-.panel-row {
-    display: flex;
-    gap: 2rem;
-    flex-wrap: wrap;
-}
-.panel-column-aside {
+.tab-btn {
     flex: 1;
-    display: flex;
-    flex-direction: column;
-    gap: 1.5rem;
-    min-width: 300px;
+    background-color: var(--bg-card);
+    color: var(--color-muted);
+    border: 1px solid #2d2d3a;
+    padding: 12px 5px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: bold;
+    font-size: 0.85rem;
+    transition: all 0.2s ease;
 }
 
-/* ==========================================
-   PANEL CENTRAL Y FORMULARIOS
-   ========================================== */
-.panel-section {
-    background-color: var(--bg-dark-card);
-    border: 1px solid var(--border-color);
-    padding: 2rem;
-    border-radius: var(--radius);
+.tab-btn.active {
+    background-color: #2d2d3a;
+    color: var(--color-text);
+    border-bottom: 3px solid var(--neon-blue);
 }
-.form-panel { flex: 1; min-width: 300px; }
 
-.panel-section h3 { font-size: 1.3rem; margin-bottom: 0.25rem; }
-.panel-section p { color: var(--text-muted); font-size: 0.9rem; margin-bottom: 1.5rem; }
+/* Formularios */
+.card-form, .card-reporte {
+    background-color: var(--bg-card);
+    border-radius: 12px;
+    padding: 20px;
+    border: 1px solid #2d2d3a;
+}
 
-.form-group { margin-bottom: 1.25rem; }
-.form-group label { display: block; font-size: 0.85rem; color: var(--text-muted); margin-bottom: 0.5rem; }
+.card-form h3, .card-reporte h3 {
+    font-size: 1.2rem;
+    margin-bottom: 15px;
+}
+
+.form-group {
+    margin-bottom: 15px;
+}
+
+.form-group label {
+    display: block;
+    font-size: 0.85rem;
+    color: var(--color-muted);
+    margin-bottom: 6px;
+}
+
 .form-group input, .form-group select {
     width: 100%;
-    background-color: var(--bg-dark-deep);
-    border: 1px solid var(--border-color);
-    color: var(--text-main);
-    padding: 0.75rem 1rem;
+    background-color: var(--bg-input);
+    border: 1px solid #3a3a4a;
+    color: white;
+    padding: 10px;
     border-radius: 6px;
     font-size: 1rem;
-    outline: none;
-    transition: border-color 0.2s;
 }
-.form-group input:focus, .form-group select:focus { border-color: var(--crypto-blue); }
 
-.btn-crypto {
+.form-group input:focus, .form-group select:focus {
+    outline: none;
+    border-color: var(--neon-blue);
+}
+
+.btn-primary {
     width: 100%;
-    background: linear-gradient(135deg, #3b82f6, #1d4ed8);
+    background: linear-gradient(135deg, #00d2d3, #00a8ff);
     color: white;
     border: none;
-    padding: 0.85rem;
+    padding: 12px;
     border-radius: 6px;
     font-size: 1rem;
-    font-weight: 600;
+    font-weight: bold;
     cursor: pointer;
-    transition: opacity 0.2s;
-    margin-top: 0.5rem;
 }
-.btn-crypto:hover { opacity: 0.9; }
 
-/* ==========================================
-   HISTORIAL Y FILTROS
-   ========================================== */
-.filter-container {
-    margin-bottom: 1.25rem;
-    display: flex;
-    gap: 0.5rem;
-}
-.btn-filter {
-    background-color: var(--bg-dark-deep);
-    border: 1px solid var(--border-color);
-    color: var(--text-muted);
-    padding: 0.5rem 1rem;
+.btn-secondary {
+    width: 100%;
+    background-color: #2d2d3a;
+    color: white;
+    border: 1px solid #3a3a4a;
+    padding: 10px;
     border-radius: 6px;
     cursor: pointer;
-    font-size: 0.85rem;
-    font-weight: 600;
-    transition: all 0.2s;
 }
-.btn-filter:hover { border-color: var(--crypto-blue); color: var(--text-main); }
-.btn-filter.active { background-color: var(--crypto-blue); border-color: var(--crypto-blue); color: white; }
 
-.history-list { display: flex; flex-direction: column; gap: 0.75rem; max-height: 400px; overflow-y: auto; padding-right: 5px; }
-.empty-state { text-align: center; color: var(--text-muted); padding: 2rem 0; font-style: italic; }
+/* Módulo de Deudas Específico */
+.grid-finance {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 20px;
+}
 
-.item-transaction {
-    background-color: var(--bg-dark-deep);
-    border: 1px solid var(--border-color);
-    padding: 1rem;
+.btn-deuda { background: linear-gradient(135deg, #ff4757, #ff6b81) !important; }
+.btn-abono { background: linear-gradient(135deg, #eccc68, #ffa502) !important; color: #121216 !important; }
+
+.deuda-item {
+    background: var(--bg-input);
+    padding: 15px;
     border-radius: 8px;
+    margin-bottom: 15px;
+    border-left: 4px solid var(--neon-red);
+}
+
+.deuda-info {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 8px;
+}
+
+.progress-bar-container {
+    background: var(--bg-main);
+    border-radius: 10px;
+    height: 12px;
+    width: 100%;
+    overflow: hidden;
+}
+
+.progress-bar-fill {
+    background: linear-gradient(90deg, var(--neon-green), #7bed9f);
+    height: 100%;
+    width: 0%;
+    transition: width 0.4s ease;
+}
+
+.deuda-totales {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.8rem;
+    color: var(--color-muted);
+    margin-top: 5px;
+}
+
+/* Reportes y Barras */
+.subtitle { font-size: 0.8rem; color: var(--color-muted); margin-top: -10px; margin-bottom: 15px; }
+
+.barra-progreso { margin-bottom: 12px; }
+.barra-labels { display: flex; justify-content: space-between; font-size: 0.85rem; margin-bottom: 4px; }
+.barra-fondo { background-color: var(--bg-main); height: 8px; border-radius: 4px; overflow: hidden; }
+.barra-relleno { background-color: var(--neon-purple); height: 100%; width: 0%; transition: width 0.3s; }
+
+/* Filtros e Historial */
+.filtros-container { display: flex; gap: 5px; margin-bottom: 15px; overflow-x: auto; }
+.filter-btn {
+    background-color: var(--bg-input);
+    border: none;
+    color: var(--color-muted);
+    padding: 6px 12px;
+    border-radius: 4px;
+    font-size: 0.75rem;
+    cursor: pointer;
+}
+.filter-btn.active { background-color: #00a8ff; color: white; }
+
+.movimiento-card {
+    background-color: var(--bg-input);
+    padding: 12px;
+    border-radius: 8px;
+    margin-bottom: 8px;
     display: flex;
     justify-content: space-between;
     align-items: center;
 }
-.item-info h4 { font-size: 1rem; font-weight: 600; margin-bottom: 0.2rem; }
-.item-amount-action { display: flex; align-items: center; gap: 1rem; }
-.item-amount { font-weight: 700; font-size: 1.1rem; }
 
-.type-ingreso { color: var(--crypto-green); }
-.type-gasto { color: var(--crypto-red); }
+.mov-meta h5 { font-size: 0.95rem; margin-bottom: 2px; }
+.mov-meta p { font-size: 0.75rem; color: var(--color-muted); }
+.mov-monto-box { display: flex; align-items: center; gap: 10px; }
+.mov-monto { font-weight: bold; font-size: 1rem; }
+.btn-delete { background: none; border: none; color: #ff4757; cursor: pointer; font-size: 1.1rem; }
 
-.btn-delete-trans { background: none; border: none; color: var(--text-muted); cursor: pointer; font-size: 1.1rem; transition: color 0.2s; }
-.btn-delete-trans:hover { color: var(--crypto-red); }
-
-/* ==========================================
-   CONTENEDORES DINÁMICOS Y TOASTS
-   ========================================== */
-.status-list-container {
-    margin-top: 1.5rem;
-    display: flex;
-    flex-direction: column;
-    gap: 1rem;
+/* Alertas de límites */
+.limite-alerta {
+    background-color: rgba(2ff, 71, 87, 0.1);
+    border: 1px solid var(--neon-red);
+    padding: 10px;
+    border-radius: 6px;
+    margin-top: 10px;
+    font-size: 0.8rem;
+    color: #ff6b81;
 }
-.status-list-container.font-small { gap: 0.8rem; font-size: 0.85rem; }
 
-.toast-container { position: fixed; bottom: 20px; right: 20px; display: flex; flex-direction: column; gap: 10px; z-index: 1000; }
-.toast { background-color: #171e2e; color: white; padding: 1rem 1.5rem; border-radius: 8px; box-shadow: 0 10px 15px -3px rgba(0,0,0,0.3); font-size: 0.95rem; display: flex; align-items: center; gap: 0.5rem; min-width: 280px; border-left: 4px solid var(--crypto-blue); }
-.toast-success { border-left-color: var(--crypto-green); }
-.toast-danger { border-left-color: var(--crypto-red); }
-.toast-warning { border-left-color: #f59e0b !important; }
+.respaldo-actions { display: flex; gap: 10px; margin-top: 15px; }
+.btn-respaldo {
+    flex: 1;
+    background: none;
+    border: 1px dashed var(--color-muted);
+    color: var(--color-muted);
+    padding: 10px;
+    font-size: 0.8rem;
+    border-radius: 6px;
+    cursor: pointer;
+}

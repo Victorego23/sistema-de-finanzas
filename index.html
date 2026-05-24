@@ -3,198 +3,194 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TommyFinance - Control de Gastos Personal</title>
+    <title>TommyFinance - Control de Gastos Avanzado</title>
     <link rel="stylesheet" href="css/styles.css">
 </head>
 <body>
-    <!-- Barra de Navegación superior estilo Tommy -->
-    <nav class="crypto-nav">
-        <div class="logo">
-            <span class="icon">⚡</span> TommyFinance
-        </div>
-        <div class="user-status">
-            <span class="dot">●</span> Billetera de Tommy
-        </div>
-    </nav>
 
-    <main class="dashboard-container">
-        <!-- SECCIÓN 1: TARJETAS DE BALANCE GENERAL -->
+    <header>
+        <div class="logo-container">
+            <h1>⚡ TommyFinance</h1>
+            <span class="badge">🔹 Billetera de Tommy</span>
+        </div>
+    </header>
+
+    <main class="container">
+        <!-- Indicadores Principales (Tarjetas de Balance) -->
         <section class="balance-cards">
-            <div class="card card-balance">
-                <h4>Balance Neto</h4>
-                <span id="total-balance">S/ 0.00</span>
+            <div class="card balance-neto">
+                <h4>BALANCE NETO</h4>
+                <h2 id="txt-balance-neto">S/ 0.00</h2>
             </div>
-            <div class="card card-ingresos">
-                <h4>Total Ingresos 🟢</h4>
-                <span id="total-ingresos">S/ 0.00</span>
+            <div class="card total-ingresos">
+                <h4>TOTAL INGRESOS <span class="dot green">●</span></h4>
+                <h2 id="txt-total-ingresos">S/ 0.00</h2>
             </div>
-            <div class="card card-gastos">
-                <h4>Total Gastos / Deudas 🔴</h4>
-                <span id="total-gastos">S/ 0.00</span>
+            <div class="card total-gastos">
+                <h4>TOTAL GASTOS / DEUDAS <span class="dot red">●</span></h4>
+                <h2 id="txt-total-gastos">S/ 0.00</h2>
             </div>
         </section>
 
-        <!-- NAVEGACIÓN DE PESTAÑAS (TABS) -->
-        <div class="tabs-nav">
-            <button class="btn-tab active" data-tab="registro">➕ Registrar Dinero</button>
-            <button class="btn-tab" data-tab="historial">📊 Ver Mis Cuentas</button>
+        <!-- Barra de Navegación de Pestañas -->
+        <nav class="nav-tabs">
+            <button class="tab-btn active" onclick="cambiarPestaña('registrar')">➕ Registrar Dinero</button>
+            <button class="tab-btn" onclick="cambiarPestaña('cuentas')">📊 Ver Mis Cuentas</button>
+            <button class="tab-btn" onclick="cambiarPestaña('deudas')">💸 Control de Deudas</button>
+        </nav>
+
+        <!-- CONTENIDO PESTAÑA 1: REGISTRAR DINERO -->
+        <div id="pestaña-registrar" class="tab-content">
+            <div class="card-form">
+                <h3>📝 Nueva Operación</h3>
+                <form id="form-operacion" onsubmit="registrarOperacion(event)">
+                    <div class="form-group">
+                        <label for="op-monto">Monto Exacto (S/)</label>
+                        <input type="number" step="0.01" id="op-monto" placeholder="0.00" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="op-tipo">Tipo de Operación</label>
+                        <select id="op-tipo" onchange="actualizarCategorias()" required>
+                            <option value="ingreso">🟢 Ingreso mensual (Mi Trabajo / Entradas)</option>
+                            <option value="gasto" selected>🔴 Gasto / Deuda (Salidas)</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="op-categoria">Categoría</label>
+                        <select id="op-categoria" required>
+                            <!-- Las opciones se cargan dinámicamente con JS -->
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="op-metodo">Método / Destino</label>
+                        <select id="op-metodo" required>
+                            <option value="Yape/Plin">📱 Yape / Plin</option>
+                            <option value="Tarjeta de Débito">💳 Tarjeta de Débito</option>
+                            <option value="Tarjeta de Crédito">💳 Tarjeta de Crédito</option>
+                            <option value="Efectivo">💵 Efectivo</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="op-concepto">Detalle / Concepto</label>
+                        <input type="text" id="op-concepto" placeholder="Ej. Almuerzo menú, pago de internet..." required>
+                    </div>
+
+                    <button type="submit" class="btn-primary">Registrar en la Billetera</button>
+                </form>
+            </div>
+
+            <!-- Ajuste de Límites de Presupuesto Mensual -->
+            <div class="card-form" style="margin-top: 20px;">
+                <h3>🎯 Límites de Presupuesto</h3>
+                <form id="form-limite" onsubmit="establecerLimite(event)">
+                    <div class="form-group">
+                        <label for="limite-categoria">Categoría de Gasto</label>
+                        <select id="limite-categoria" required>
+                            <option value="Alimentación">🍔 Alimentación</option>
+                            <option value="Servicios">💡 Servicios</option>
+                            <option value="Entretenimiento">🎬 Entretenimiento</option>
+                            <option value="Trabajo">💼 Trabajo</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="limite-monto">Monto Máximo Límite (S/)</label>
+                        <input type="number" step="0.01" id="limite-monto" placeholder="Ej. 400.00" required>
+                    </div>
+                    <button type="submit" class="btn-secondary">Establecer Límite</button>
+                </form>
+                <div id="lista-limites" class="limites-container"></div>
+            </div>
         </div>
 
-        <!-- SECCIÓN 2: VENTANAS DE CONTENIDO -->
-        <div class="tabs-container">
-            
-            <!-- VENTANA 1: REGISTROS Y METAS -->
-            <div id="tab-registro" class="tab-content active">
-                <div class="panel-row">
-                    
-                    <!-- Formulario Principal -->
-                    <section class="panel-section form-panel">
-                        <h3>Nueva Operación</h3>
-                        <p>Pon tu sueldo de tu trabajo o registra tus deudas actuales.</p>
-
-                        <form id="finance-form">
-                            <div class="form-group">
-                                <label for="amount">Monto Exacto (S/)</label>
-                                <input type="number" id="amount" step="0.01" required placeholder="0.00">
-                            </div>
-
-                            <div class="form-group">
-                                <label for="type">Tipo de Operación</label>
-                                <select id="type" required>
-                                    <option value="ingreso">🟢 Ingreso mensual (Mi Trabajo / Entradas)</option>
-                                    <option value="gasto">🔴 Gasto / Deuda (Salidas)</option>
-                                </select>
-                            </div>
-
-                            <div class="form-group">
-                                <label for="category">Categoría</label>
-                                <select id="category" required>
-                                    <option value="">Selecciona una categoría</option>
-                                    <option value="Trabajo">💼 Trabajo Mensual / Freelance</option>
-                                    <option value="Alimentación">🍔 Alimentación / Restaurantes</option>
-                                    <option value="Transporte">🚗 Transporte / Pasajes</option>
-                                    <option value="Servicios">💡 Servicios (Luz, Internet, Celular)</option>
-                                    <option value="Entretenimiento">🎬 Entretenimiento / Ocio</option>
-                                </select>
-                            </div>
-
-                            <div class="form-group">
-                                <label for="payment-method">Método / Destino</label>
-                                <select id="payment-method" required>
-                                    <option value="Yape/Plin">📱 Yape / Plin</option>
-                                    <option value="Efectivo">💵 Efectivo</option>
-                                    <option value="Débito">💳 Tarjeta de Débito</option>
-                                    <option value="Crédito">💳 Tarjeta de Crédito</option>
-                                </select>
-                            </div>
-
-                            <div class="form-group">
-                                <label for="description">Detalle / Concepto</label>
-                                <input type="text" id="description" required placeholder="Ej: Sueldo de Mayo, Pago de tarjeta, Compras">
-                            </div>
-
-                            <button type="submit" class="btn-crypto">Registrar en la Billetera</button>
-                        </form>
-                    </section>
-
-                    <!-- Configuración de Presupuestos Límite y Cochinito -->
-                    <div class="panel-column-aside">
-                        <!-- Cochinito -->
-                        <section class="panel-section savings-panel">
-                            <h3>🐖 Cochinito Digital</h3>
-                            <p>Fija metas de ahorro y aparta dinero para cosas especiales.</p>
-                            <form id="savings-form">
-                                <div class="form-group">
-                                    <label for="goal-name">Nombre de la Meta</label>
-                                    <input type="text" id="goal-name" required placeholder="Ej: Laptop Nueva, Fondo de Emergencia">
-                                </div>
-                                <div class="form-group">
-                                    <label for="goal-target">Monto Objetivo (S/)</label>
-                                    <input type="number" id="goal-target" step="0.01" required placeholder="Ej: 2000.00">
-                                </div>
-                                <button type="submit" class="btn-crypto" style="background: linear-gradient(135deg, #a855f7, #7e22ce);">Crear Meta</button>
-                            </form>
-                            <div id="savings-status-list" class="status-list-container"></div>
-                        </section>
-
-                        <!-- Presupuestos -->   
-                        <section class="panel-section budget-panel">
-                            <h3>🎯 Límites de Presupuesto</h3>
-                            <p>Define cuánto es lo máximo que vas a gastar al mes.</p>
-                            <form id="budget-form">
-                                <div class="form-group">
-                                    <label for="budget-category">Categoría</label>
-                                    <select id="budget-category" required>
-                                        <option value="Alimentación">🍔 Alimentación / Restaurantes</option>
-                                        <option value="Transporte">🚗 Transporte / Pasajes</option>
-                                        <option value="Servicios">💡 Servicios (Luz, Internet, Celular)</option>
-                                        <option value="Entretenimiento">🎬 Entretenimiento / Ocio</option>
-                                    </select>
-                                </div>
-                                <div class="form-group">
-                                    <label for="budget-limit">Monto Máximo Límite (S/)</label>
-                                    <input type="number" id="budget-limit" step="0.01" required placeholder="Ej: 300.00">
-                                </div>
-                                <button type="submit" class="btn-crypto" style="background: linear-gradient(135deg, #f59e0b, #d97706);">Establecer Límite</button>
-                            </form>
-                            <div id="budgets-status-list" class="status-list-container font-small"></div>
-                        </section>
-                    </div>
-
+        <!-- CONTENIDO PESTAÑA 2: VER MIS CUENTAS -->
+        <div id="pestaña-cuentas" class="tab-content" style="display: none;">
+            <div class="card-reporte">
+                <h3>📊 Distribución de Gastos</h3>
+                <p class="subtitle">Porcentajes exactos de en qué se está consumiendo tu sueldo.</p>
+                <div id="distribucion-barras" class="barras-container">
+                    <!-- Se genera por JS -->
                 </div>
             </div>
 
-            <!-- VENTANA 2: REPORTE ANCHO E HISTORIAL COMPLETO -->
-            <div id="tab-historial" class="tab-content">
-                <div class="panel-row">
-                    
-                    <!-- Reporte de Gastos por Categoría -->
-                    <section class="panel-section stats-panel" style="flex: 1; min-width: 300px; height: fit-content;">
-                        <h3>📊 Distribución de Gastos</h3>
-                        <p>Porcentajes exactos de en qué se está consumiendo tu sueldo.</p>
-                        <div id="category-stats-container" class="status-list-container"></div>
-                    </section>
+            <div class="card-reporte" style="margin-top: 20px;">
+                <h3>Historial de Operaciones</h3>
+                <p class="subtitle">Seguimiento cronológico exacto de tus ingresos y deudas.</p>
+                
+                <div class="filtros-container">
+                    <button class="filter-btn active" onclick="filtrarMovimientos('todos', this)">Todos los movimientos</button>
+                    <button class="filter-btn" onclick="filtrarMovimientos('ingreso', this)">Solo Ingresos (Trabajo)</button>
+                    <button class="filter-btn" onclick="filtrarMovimientos('gasto', this)">Solo Gastos / Deudas</button>
+                </div>
 
-                    <!-- Historial de Transacciones e Infraestructura de Seguridad -->
-                    <div class="panel-column-aside" style="flex: 1.5;">
-                        <section class="panel-section history-panel">
-                            <h3>Historial de Operaciones</h3>
-                            <p>Seguimiento cronológico exacto de tus ingresos y deudas.</p>
-
-                            <div class="filter-container">
-                                <button type="button" class="btn-filter active" data-filter="all">Todos los movimientos</button>
-                                <button type="button" class="btn-filter" data-filter="ingreso">Solo Ingresos (Trabajo)</button>
-                                <button type="button" class="btn-filter" data-filter="gasto">Solo Gastos / Deudas</button>
-                            </div>
-
-                            <div class="history-list" id="history-list">
-                                <div class="empty-state">No hay transacciones registradas.</div>
-                            </div>
-                        </section>
-
-                        <!-- Panel de Seguridad Local para tus Respaldos -->
-                        <section class="panel-section security-panel" style="border-top: 4px solid var(--crypto-purple);">
-                            <h3>🔐 Copias de Seguridad</h3>
-                            <p>Descarga un respaldo para no perder tus datos si limpias el navegador.</p>
-                            
-                            <div style="display: flex; flex-direction: column; gap: 0.75rem;">
-                                <button type="button" id="btn-exportar" class="btn-crypto" style="background: linear-gradient(135deg, #10b981, #059669);">📥 Descargar Copia de Respaldo</button>
-                                
-                                <div style="border-top: 1px solid var(--border-color); margin-top: 0.5rem; padding-top: 0.75rem;">
-                                    <label style="display: block; font-size: 0.85rem; color: var(--text-muted); margin-bottom: 0.5rem;">Restaurar una copia anterior (.json):</label>
-                                    <input type="file" id="input-importar" accept=".json">
-                                </div>
-                            </div>
-                        </section>
-                    </div>
-
+                <div id="historial-lista" class="historial-container">
+                    <!-- Se renderiza dinámicamente con JS -->
                 </div>
             </div>
 
+            <!-- Herramientas de Respaldo -->
+            <div class="respaldo-actions">
+                <button onclick="exportarDatos()" class="btn-respaldo">📥 Descargar Copia de Seguridad</button>
+                <button onclick="document.getElementById('input-importar').click()" class="btn-respaldo">📤 Restaurar Respaldo</button>
+                <input type="file" id="input-importar" style="display: none;" onchange="importarDatos(event)">
+            </div>
+        </div>
+
+        <!-- CONTENIDO PESTAÑA 3: CONTROL DE DEUDAS (NUEVO) -->
+        <div id="pestaña-deudas" class="tab-content" style="display: none;">
+            <div class="grid-finance">
+                <div class="card-form">
+                    <h3>📝 Registrar Nuevo Préstamo / Deuda Grande</h3>
+                    <form id="form-nuevo-prestamo" onsubmit="crearPrestamo(event)">
+                        <div class="form-group">
+                            <label for="deuda-nombre">Nombre del Préstamo / Acreedor</label>
+                            <input type="text" id="deuda-nombre" placeholder="Ej. Préstamo Trabajo, Banco, Persona" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="deuda-total">Monto Total Prestado (S/)</label>
+                            <input type="number" step="0.01" id="deuda-total" placeholder="0.00" required>
+                        </div>
+                        <button type="submit" class="btn-primary btn-deuda">Registrar Deuda Total</button>
+                    </form>
+                </div>
+
+                <div class="card-form">
+                    <h3>💰 Registrar Abono de Cuota</h3>
+                    <form id="form-abonar-prestamo" onsubmit="abonarPrestamo(event)">
+                        <div class="form-group">
+                            <label for="select-deuda-activa">Seleccionar Deuda Activa</label>
+                            <select id="select-deuda-activa" required>
+                                <option value="">-- Selecciona una deuda --</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="abono-monto">Monto a Abonar este mes (S/)</label>
+                            <input type="number" step="0.01" id="abono-monto" placeholder="0.00" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="abono-metodo">Método de Pago Utilizado</label>
+                            <select id="abono-metodo" required>
+                                <option value="Yape/Plin">📱 Yape / Plin</option>
+                                <option value="Tarjeta de Débito">💳 Tarjeta de Débito</option>
+                                <option value="Efectivo">💵 Efectivo</option>
+                            </select>
+                        </div>
+                        <button type="submit" class="btn-primary btn-abono">Registrar Pago de Cuota</button>
+                    </form>
+                </div>
+            </div>
+
+            <div class="card-reporte" style="margin-top: 20px;">
+                <h3>📋 Estado General de mis Préstamos</h3>
+                <div id="lista-prestamos-progreso">
+                    <!-- Se renderiza por JS -->
+                </div>
+            </div>
         </div>
     </main>
-
-    <div id="toast-container" class="toast-container"></div>
 
     <script src="js/finanzas.js"></script>
 </body>
