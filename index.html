@@ -24,7 +24,7 @@
             </div>
         </section>
 
-        <!-- NUEVO: Desglose por Cuentas y Bancos / Billeteras -->
+        <!-- Desglose por Cuentas y Bancos / Billeteras -->
         <section class="bancos-cards">
             <div class="sub-card yape-box">
                 <p>📱 Yape / Plin</p>
@@ -50,9 +50,7 @@
         <!-- CONTENIDO PESTAÑA 1: REGISTRAR DINERO -->
         <div id="pestaña-registrar" class="tab-content">
             <!-- Alerta Inteligente de Descuento de Préstamo -->
-            <div id="alerta-automatica-cuota" class="alerta-cuota-automatica" style="display: none;">
-                <!-- Mensaje inyectado por JS -->
-            </div>
+            <div id="alerta-automatica-cuota" class="alerta-cuota-automatica" style="display: none;"></div>
 
             <div class="card-form">
                 <h3>📝 Nueva Operación</h3>
@@ -72,9 +70,7 @@
 
                     <div class="form-group">
                         <label for="op-categoria">Categoría</label>
-                        <select id="op-categoria" required>
-                            <!-- Dinámico -->
-                        </select>
+                        <select id="op-categoria" required></select>
                     </div>
 
                     <div class="form-group">
@@ -153,12 +149,20 @@
                             <input type="text" id="deuda-nombre" placeholder="Ej. Préstamo Interbank, BCP, Caja" required>
                         </div>
                         <div class="form-group">
-                            <label for="deuda-total">Monto Total de la Deuda (S/)</label>
+                            <label for="deuda-total">Monto Total Original de la Deuda (S/)</label>
                             <input type="number" step="0.01" id="deuda-total" placeholder="0.00" required>
                         </div>
                         <div class="form-group">
                             <label for="deuda-cuota">Cuota Fija a Descontar Mensualmente (S/)</label>
                             <input type="number" step="0.01" id="deuda-cuota" placeholder="Ej. 300.00" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="deuda-cuotas-totales">Número Total de Cuotas Contratadas</label>
+                            <input type="number" id="deuda-cuotas-totales" placeholder="Ej. 12" min="1" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="deuda-cuotas-ya-pagadas">¿Cuántas cuotas ya has pagado hasta hoy?</label>
+                            <input type="number" id="deuda-cuotas-ya-pagadas" value="0" min="0" placeholder="Pon 0 si es una deuda nueva">
                         </div>
                         <button type="submit" class="btn-primary btn-deuda">Registrar Deuda Bancaria</button>
                     </form>

@@ -1,4 +1,4 @@
-// Carga inicial segura de datos
+// Arreglos de Datos persistidos de LocalStorage
 let operaciones = JSON.parse(localStorage.getItem('tommy_operaciones')) || [];
 let limites = JSON.parse(localStorage.getItem('tommy_limites')) || {};
 let prestamos = JSON.parse(localStorage.getItem('tommy_prestamos')) || [];
@@ -49,7 +49,7 @@ function cambiarPestaña(pestana) {
     if(event && event.currentTarget) event.currentTarget.classList.add('active');
 }
 
-// NUEVO: Cálculo matemático avanzado desglosado por Banco y Yape
+// Cálculo matemático inteligente desglosado por Cuentas y Billeteras reales
 function calcularGlobales() {
     let saldoYape = 0;
     let saldoBanco = 0;
@@ -61,7 +61,7 @@ function calcularGlobales() {
             if (op.metodo === 'Yape/Plin') saldoYape += monto;
             if (op.metodo === 'Tarjeta de Débito') saldoBanco += monto;
             if (op.metodo === 'Efectivo') saldoEfectivo += monto;
-        } else { // es gasto / salida
+        } else {
             if (op.metodo === 'Yape/Plin') saldoYape -= monto;
             if (op.metodo === 'Tarjeta de Débito') saldoBanco -= monto;
             if (op.metodo === 'Efectivo') saldoEfectivo -= monto;
@@ -70,7 +70,6 @@ function calcularGlobales() {
 
     const balanceTotal = saldoYape + saldoBanco + saldoEfectivo;
 
-    // Renderizar tarjetas superiores
     const txtNeto = document.getElementById('txt-balance-neto');
     txtNeto.textContent = `S/ ${balanceTotal.toFixed(2)}`;
     txtNeto.style.color = balanceTotal >= 0 ? '#2ed573' : '#ff4757';
@@ -80,7 +79,7 @@ function calcularGlobales() {
     document.getElementById('saldo-efectivo').textContent = `S/ ${saldoEfectivo.toFixed(2)}`;
 }
 
-// NUEVO: Intercepta el ingreso de trabajo y calcula deudas asociadas en tiempo real
+// Registro principal de operaciones
 function registrarOperacion(e) {
     e.preventDefault();
 
@@ -103,7 +102,6 @@ function registrarOperacion(e) {
     operaciones.push(nuevaOp);
     localStorage.setItem('tommy_operaciones', JSON.stringify(operaciones));
 
-    // LÓGICA DE DETECCIÓN INTELIGENTE DE CUOTAS
     if (tipo === 'ingreso' && categoria === 'Trabajo') {
         procesarDescuentoAutomaticoPrestamos(monto, metodo);
     }
@@ -114,7 +112,7 @@ function registrarOperacion(e) {
     verificarLimitesAlerta(categoria);
 }
 
-// NUEVO: Descuenta automáticamente la cuota fija del banco al entrar tu dinero
+// Descuento automático acoplado al contador de cuotas
 function procesarDescuentoAutomaticoPrestamos(ingresoMonto, metodoPago) {
     let cuotasCobradas = 0;
     let mensajeDetalle = "";
@@ -126,20 +124,27 @@ function procesarDescuentoAutomaticoPrestamos(ingresoMonto, metodoPago) {
             if (montoADescontar > restante) montoADescontar = restante;
 
             p.montoPagado += montoADescontar;
+            
+            if (p.cuotasPagadas < p.cuotasTotales) {
+                p.cuotasPagadas += 1;
+            }
+            if (p.montoPagado >= p.montoTotal) {
+                p.cuotasPagadas = p.cuotasTotales;
+            }
+
             cuotasCobradas += montoADescontar;
 
-            // Inyectar la salida de forma automática
             const autoGasto = {
                 id: 'op_auto_' + Date.now() + Math.random(),
                 monto: montoADescontar,
                 tipo: 'gasto',
                 categoria: 'Trabajo',
-                metodo: metodoPago, // Sale de la misma cuenta donde entró
-                concepto: `🤖 Débito Auto: Cuota de ${p.nombre}`,
+                metodo: metodoPago,
+                concepto: `🤖 Débito Auto (Cuota ${p.cuotasPagadas}/${p.cuotasTotales}) de ${p.nombre}`,
                 fecha: new Date().toLocaleString('es-PE', { dateStyle: 'short', timeStyle: 'short' })
             };
             operaciones.push(autoGasto);
-            mensajeDetalle += `<br>• S/ ${montoADescontar.toFixed(2)} transferidos a: ${p.nombre}`;
+            mensajeDetalle += `<br>• S/ ${montoADescontar.toFixed(2)} (Cuota ${p.cuotasPagadas}/${p.cuotasTotales}) -> ${p.nombre}`;
         }
     });
 
@@ -147,35 +152,42 @@ function procesarDescuentoAutomaticoPrestamos(ingresoMonto, metodoPago) {
         localStorage.setItem('tommy_prestamos', JSON.stringify(prestamos));
         localStorage.setItem('tommy_operaciones', JSON.stringify(operaciones));
 
-        // Mostrar alerta visual en la UI
         const cajaAlerta = document.getElementById('alerta-automatica-cuota');
-        cajaAlerta.style.display = 'block';
-        cajaAlerta.innerHTML = `<strong>🤖 Asistente Financiero:</strong> Se detectó tu ingreso de Trabajo. Sistema cobró automáticamente tus deudas pendientes bancarias: ${mensajeDetalle}`;
-        
-        // Desaparecer alerta en 10 segundos
-        setTimeout(() => { cajaAlerta.style.display = 'none'; }, 10000);
+        if (cajaAlerta) {
+            cajaAlerta.style.display = 'block';
+            cajaAlerta.innerHTML = `<strong>🤖 Asistente Financiero:</strong> Se detectó tu ingreso de Trabajo. Sistema cobró automáticamente tus cuotas: ${mensajeDetalle}`;
+            setTimeout(() => { cajaAlerta.style.display = 'none'; }, 10000);
+        }
     }
 }
 
-// Gestión del Módulo de Préstamos
+// MÓDULO DE PRÉSTAMOS CON SOPORTE PARA CUOTAS PREVIAS YA AMORTIZADAS
 function crearPrestamo(e) {
     e.preventDefault();
     const nombre = document.getElementById('deuda-nombre').value;
     const total = parseFloat(document.getElementById('deuda-total').value);
     const cuota = parseFloat(document.getElementById('deuda-cuota').value);
+    const cuotasTotales = parseInt(document.getElementById('deuda-cuotas-totales').value);
+    const cuotasYaPagadas = parseInt(document.getElementById('deuda-cuotas-ya-pagadas').value) || 0;
+
+    let montoPagadoInicial = cuotasYaPagadas * cuota;
+    if (montoPagadoInicial > total) montoPagadoInicial = total;
 
     const nuevoPrestamo = {
         id: 'prestamo_' + Date.now(),
         nombre,
         montoTotal: total,
-        montoPagado: 0,
-        cuotaFija: cuota
+        montoPagado: montoPagadoInicial,
+        cuotaFija: cuota,
+        cuotasTotales: cuotasTotales,
+        cuotasPagadas: cuotasYaPagadas
     };
 
     prestamos.push(nuevoPrestamo);
     localStorage.setItem('tommy_prestamos', JSON.stringify(prestamos));
 
     document.getElementById('form-nuevo-prestamo').reset();
+    document.getElementById('deuda-cuotas-ya-pagadas').value = "0";
     actualizarModuloDeudas();
 }
 
@@ -190,7 +202,13 @@ function abonarPrestamo(e) {
     const prestamo = prestamos.find(p => p.id === idPrestamo);
     if (prestamo) {
         prestamo.montoPagado += montoAbono;
-        if (prestamo.montoPagado > prestamo.montoTotal) prestamo.montoPagado = prestamo.montoTotal;
+        if (prestamo.cuotasPagadas < prestamo.cuotasTotales) {
+            prestamo.cuotasPagadas += 1;
+        }
+        if (prestamo.montoPagado > prestamo.montoTotal) {
+            prestamo.montoPagado = prestamo.montoTotal;
+            prestamo.cuotasPagadas = prestamo.cuotasTotales;
+        }
 
         localStorage.setItem('tommy_prestamos', JSON.stringify(prestamos));
 
@@ -200,7 +218,7 @@ function abonarPrestamo(e) {
             tipo: 'gasto',
             categoria: 'Trabajo',
             metodo,
-            concepto: `Abono manual a: ${prestamo.nombre}`,
+            concepto: `Abono manual (Cuota ${prestamo.cuotasPagadas}/${prestamo.cuotasTotales}) a: ${prestamo.nombre}`,
             fecha: new Date().toLocaleString('es-PE', { dateStyle: 'short', timeStyle: 'short' })
         };
 
@@ -229,6 +247,7 @@ function actualizarModuloDeudas() {
     prestamos.forEach(p => {
         const restante = p.montoTotal - p.montoPagado;
         const porcentaje = ((p.montoPagado / p.montoTotal) * 100).toFixed(1);
+        const cuotasRestantes = p.cuotasTotales - p.cuotasPagadas;
 
         if (restante > 0) {
             const option = document.createElement('option');
@@ -245,14 +264,14 @@ function actualizarModuloDeudas() {
             <div class="deuda-info">
                 <strong>📌 ${p.nombre}</strong>
                 <span style="color: ${restante === 0 ? 'var(--neon-green)' : 'var(--neon-red)'}">
-                    ${restante === 0 ? '✅ ¡PAGADO!' : `Resta: S/ ${restante.toFixed(2)}`}
+                    ${restante === 0 ? '✅ ¡PAGADO!' : `Faltan pagar: ${cuotasRestantes} meses`}
                 </span>
             </div>
             <div class="progress-bar-container">
                 <div class="progress-bar-fill" style="width: ${porcentaje}%"></div>
             </div>
             <div class="deuda-totales">
-                <span>Progreso: ${porcentaje}% (Cuota: S/ ${p.cuotaFija.toFixed(2)}/mes)</span>
+                <span>🗓️ Cuotas: ${p.cuotasPagadas} de ${p.cuotasTotales} pagadas</span>
                 <span>S/ ${p.montoPagado.toFixed(2)} de S/ ${p.montoTotal.toFixed(2)}</span>
             </div>
         `;
@@ -260,7 +279,7 @@ function actualizarModuloDeudas() {
     });
 }
 
-// Configuración de límites y reportes heredados
+// Configuración de límites y reportes
 function establecerLimite(e) {
     e.preventDefault();
     const cat = document.getElementById('limite-categoria').value;
@@ -347,7 +366,7 @@ function renderizarDistribucion() {
     if(!contenedor) return;
     contenedor.innerHTML = '';
     let totalGastos = 0;
-    let totalesPorCategoria = { Alimentación: 0, Servicios: 0, Entertainment: 0, Trabajo: 0 };
+    let totalesPorCategoria = { Alimentación: 0, Servicios: 0, Entretenimiento: 0, Trabajo: 0 };
 
     operaciones.forEach(op => {
         if (op.tipo === 'gasto') {
@@ -363,7 +382,7 @@ function renderizarDistribucion() {
         barraHTML.className = 'barra-progreso';
         barraHTML.innerHTML = `
             <div class="barra-labels"><span>${cat}</span><span>S/ ${gastado.toFixed(2)} (${porcentaje}%)</span></div>
-            <div class="barra-fondo"><div class="barra-relleno" style="width: ${porcentaje}%;"></div></div>
+            <div class="barra-fondo"><div class="barra-relleno" style="width: ${porcentaje}%; background-color: ${cat === 'Trabajo' ? '#9b5de5' : '#00d2d3'}"></div></div>
         `;
         contenedor.appendChild(barraHTML);
     }

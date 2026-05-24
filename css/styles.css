@@ -18,13 +18,13 @@ header { background-color: var(--bg-card); padding: 15px 20px; border-bottom: 2p
 .badge { background-color: #2d2d3a; color: var(--neon-blue); padding: 5px 12px; border-radius: 20px; font-size: 0.85rem; font-weight: bold; }
 .container { max-width: 600px; margin: 0 auto; padding: 0 15px; }
 
-/* Tarjetas Principales */
+/* Tarjetas de balances */
 .balance-cards { margin-bottom: 12px; }
 .card { background-color: var(--bg-card); border-radius: 12px; padding: 18px; border: 1px solid #2d2d3a; border-left: 5px solid var(--neon-blue); }
 .card h4 { font-size: 0.8rem; color: var(--color-muted); letter-spacing: 1px; margin-bottom: 5px; }
 .card h2 { font-size: 2rem; }
 
-/* NUEVO: Diseño Grid para Subcuentas de Bancos */
+/* Grid de Bancos / Subcuentas */
 .bancos-cards {
     display: grid;
     grid-template-columns: 1fr 1fr 1fr;
@@ -40,11 +40,11 @@ header { background-color: var(--bg-card); padding: 15px 20px; border-bottom: 2p
 }
 .sub-card p { font-size: 0.75rem; color: var(--color-muted); margin-bottom: 4px; }
 .sub-card h3 { font-size: 0.95rem; font-weight: bold; }
-.yape-box { border-bottom: 3px solid #a83294; } /* Estilo Yape Morado */
+.yape-box { border-bottom: 3px solid #a83294; }
 .banco-box { border-bottom: 3px solid var(--neon-blue); }
 .efectivo-box { border-bottom: 3px solid var(--neon-green); }
 
-/* Alerta de Automatización */
+/* Avisos del Asistente Automatizado */
 .alerta-cuota-automatica {
     background-color: rgba(255, 165, 2, 0.15);
     border: 1px dashed var(--neon-yellow);
@@ -56,12 +56,12 @@ header { background-color: var(--bg-card); padding: 15px 20px; border-bottom: 2p
     line-height: 1.4;
 }
 
-/* Tabs */
+/* Tabs de navegación */
 .nav-tabs { display: flex; gap: 8px; margin-bottom: 20px; }
 .tab-btn { flex: 1; background-color: var(--bg-card); color: var(--color-muted); border: 1px solid #2d2d3a; padding: 12px 5px; border-radius: 8px; cursor: pointer; font-weight: bold; font-size: 0.85rem; }
 .tab-btn.active { background-color: #2d2d3a; color: var(--color-text); border-bottom: 3px solid var(--neon-blue); }
 
-/* Forms y Estilos comunes */
+/* Contenedores y Formularios */
 .card-form, .card-reporte { background-color: var(--bg-card); border-radius: 12px; padding: 20px; border: 1px solid #2d2d3a; }
 .card-form h3, .card-reporte h3 { font-size: 1.1rem; margin-bottom: 12px; }
 .form-group { margin-bottom: 12px; }
@@ -70,20 +70,24 @@ header { background-color: var(--bg-card); padding: 15px 20px; border-bottom: 2p
 .btn-primary { width: 100%; background: linear-gradient(135deg, #00d2d3, #00a8ff); color: white; border: none; padding: 12px; border-radius: 6px; font-weight: bold; cursor: pointer; }
 .btn-secondary { width: 100%; background-color: #2d2d3a; color: white; border: 1px solid #3a3a4a; padding: 10px; border-radius: 6px; cursor: pointer; }
 
+.grid-finance { display: grid; grid-template-columns: 1fr; gap: 20px; }
 .btn-deuda { background: linear-gradient(135deg, #ff4757, #ff6b81) !important; }
 .btn-abono { background: linear-gradient(135deg, #eccc68, #ffa502) !important; color: #121216 !important; }
 
+/* Barras de progreso de deudas */
 .deuda-item { background: var(--bg-input); padding: 15px; border-radius: 8px; margin-bottom: 12px; border-left: 4px solid var(--neon-red); }
 .deuda-info { display: flex; justify-content: space-between; margin-bottom: 6px; font-size: 0.9rem; }
 .progress-bar-container { background: var(--bg-main); border-radius: 10px; height: 10px; width: 100%; overflow: hidden; }
 .progress-bar-fill { background: linear-gradient(90deg, var(--neon-green), #7bed9f); height: 100%; width: 0%; transition: width 0.4s; }
 .deuda-totales { display: flex; justify-content: space-between; font-size: 0.75rem; color: var(--color-muted); margin-top: 5px; }
 
+/* Distribución de barras */
 .barra-progreso { margin-bottom: 12px; }
 .barra-labels { display: flex; justify-content: space-between; font-size: 0.8rem; margin-bottom: 4px; }
 .barra-fondo { background-color: var(--bg-main); height: 8px; border-radius: 4px; overflow: hidden; }
-.barra-relleno { background-color: var(--neon-purple); height: 100%; width: 0%; }
+.barra-relleno { background-color: var(--neon-purple); height: 100%; width: 0%; transition: width 0.3s; }
 
+/* Lista de movimientos e Historial */
 .filtros-container { display: flex; gap: 5px; margin-bottom: 15px; }
 .filter-btn { background-color: var(--bg-input); border: none; color: var(--color-muted); padding: 6px 12px; border-radius: 4px; font-size: 0.75rem; cursor: pointer; }
 .filter-btn.active { background-color: #00a8ff; color: white; }
