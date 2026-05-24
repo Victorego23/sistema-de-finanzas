@@ -11,24 +11,32 @@
     <header>
         <div class="logo-container">
             <h1>⚡ TommyFinance</h1>
-            <span class="badge">🔹 Billetera de Tommy</span>
+            <span class="badge">🔹 Billetera Inteligente</span>
         </div>
     </header>
 
     <main class="container">
-        <!-- Indicadores Principales (Tarjetas de Balance) -->
+        <!-- Indicadores Principales Globales -->
         <section class="balance-cards">
             <div class="card balance-neto">
-                <h4>BALANCE NETO</h4>
+                <h4>BALANCE TOTAL DISPONIBLE</h4>
                 <h2 id="txt-balance-neto">S/ 0.00</h2>
             </div>
-            <div class="card total-ingresos">
-                <h4>TOTAL INGRESOS <span class="dot green">●</span></h4>
-                <h2 id="txt-total-ingresos">S/ 0.00</h2>
+        </section>
+
+        <!-- NUEVO: Desglose por Cuentas y Bancos / Billeteras -->
+        <section class="bancos-cards">
+            <div class="sub-card yape-box">
+                <p>📱 Yape / Plin</p>
+                <h3 id="saldo-yape">S/ 0.00</h3>
             </div>
-            <div class="card total-gastos">
-                <h4>TOTAL GASTOS / DEUDAS <span class="dot red">●</span></h4>
-                <h2 id="txt-total-gastos">S/ 0.00</h2>
+            <div class="sub-card banco-box">
+                <p>💳 Cuentas Bancarias</p>
+                <h3 id="saldo-banco">S/ 0.00</h3>
+            </div>
+            <div class="sub-card efectivo-box">
+                <p>💵 Efectivo Real</p>
+                <h3 id="saldo-efectivo">S/ 0.00</h3>
             </div>
         </section>
 
@@ -41,6 +49,11 @@
 
         <!-- CONTENIDO PESTAÑA 1: REGISTRAR DINERO -->
         <div id="pestaña-registrar" class="tab-content">
+            <!-- Alerta Inteligente de Descuento de Préstamo -->
+            <div id="alerta-automatica-cuota" class="alerta-cuota-automatica" style="display: none;">
+                <!-- Mensaje inyectado por JS -->
+            </div>
+
             <div class="card-form">
                 <h3>📝 Nueva Operación</h3>
                 <form id="form-operacion" onsubmit="registrarOperacion(event)">
@@ -60,30 +73,29 @@
                     <div class="form-group">
                         <label for="op-categoria">Categoría</label>
                         <select id="op-categoria" required>
-                            <!-- Las opciones se cargan dinámicamente con JS -->
+                            <!-- Dinámico -->
                         </select>
                     </div>
 
                     <div class="form-group">
-                        <label for="op-metodo">Método / Destino</label>
+                        <label for="op-metodo">¿A dónde entra / De dónde sale?</label>
                         <select id="op-metodo" required>
                             <option value="Yape/Plin">📱 Yape / Plin</option>
-                            <option value="Tarjeta de Débito">💳 Tarjeta de Débito</option>
-                            <option value="Tarjeta de Crédito">💳 Tarjeta de Crédito</option>
-                            <option value="Efectivo">💵 Efectivo</option>
+                            <option value="Tarjeta de Débito">💳 Cuenta de Banco (BCP/Interbank)</option>
+                            <option value="Efectivo">💵 Efectivo Físico</option>
                         </select>
                     </div>
 
                     <div class="form-group">
                         <label for="op-concepto">Detalle / Concepto</label>
-                        <input type="text" id="op-concepto" placeholder="Ej. Almuerzo menú, pago de internet..." required>
+                        <input type="text" id="op-concepto" placeholder="Ej. Pago por proyecto, sueldo, almuerzo..." required>
                     </div>
 
                     <button type="submit" class="btn-primary">Registrar en la Billetera</button>
                 </form>
             </div>
 
-            <!-- Ajuste de Límites de Presupuesto Mensual -->
+            <!-- Ajuste de Límites -->
             <div class="card-form" style="margin-top: 20px;">
                 <h3>🎯 Límites de Presupuesto</h3>
                 <form id="form-limite" onsubmit="establecerLimite(event)">
@@ -110,84 +122,74 @@
         <div id="pestaña-cuentas" class="tab-content" style="display: none;">
             <div class="card-reporte">
                 <h3>📊 Distribución de Gastos</h3>
-                <p class="subtitle">Porcentajes exactos de en qué se está consumiendo tu sueldo.</p>
-                <div id="distribucion-barras" class="barras-container">
-                    <!-- Se genera por JS -->
-                </div>
+                <div id="distribucion-barras" class="barras-container"></div>
             </div>
 
             <div class="card-reporte" style="margin-top: 20px;">
                 <h3>Historial de Operaciones</h3>
-                <p class="subtitle">Seguimiento cronológico exacto de tus ingresos y deudas.</p>
-                
                 <div class="filtros-container">
-                    <button class="filter-btn active" onclick="filtrarMovimientos('todos', this)">Todos los movimientos</button>
-                    <button class="filter-btn" onclick="filtrarMovimientos('ingreso', this)">Solo Ingresos (Trabajo)</button>
-                    <button class="filter-btn" onclick="filtrarMovimientos('gasto', this)">Solo Gastos / Deudas</button>
+                    <button class="filter-btn active" onclick="filtrarMovimientos('todos', this)">Todos</button>
+                    <button class="filter-btn" onclick="filtrarMovimientos('ingreso', this)">Ingresos</button>
+                    <button class="filter-btn" onclick="filtrarMovimientos('gasto', this)">Gastos</button>
                 </div>
-
-                <div id="historial-lista" class="historial-container">
-                    <!-- Se renderiza dinámicamente con JS -->
-                </div>
+                <div id="historial-lista" class="historial-container"></div>
             </div>
 
-            <!-- Herramientas de Respaldo -->
             <div class="respaldo-actions">
-                <button onclick="exportarDatos()" class="btn-respaldo">📥 Descargar Copia de Seguridad</button>
-                <button onclick="document.getElementById('input-importar').click()" class="btn-respaldo">📤 Restaurar Respaldo</button>
+                <button onclick="exportarDatos()" class="btn-respaldo">📥 Descargar Copia</button>
+                <button onclick="document.getElementById('input-importar').click()" class="btn-respaldo">📤 Cargar Respaldo</button>
                 <input type="file" id="input-importar" style="display: none;" onchange="importarDatos(event)">
             </div>
         </div>
 
-        <!-- CONTENIDO PESTAÑA 3: CONTROL DE DEUDAS (NUEVO) -->
+        <!-- CONTENIDO PESTAÑA 3: CONTROL DE DEUDAS -->
         <div id="pestaña-deudas" class="tab-content" style="display: none;">
             <div class="grid-finance">
                 <div class="card-form">
-                    <h3>📝 Registrar Nuevo Préstamo / Deuda Grande</h3>
+                    <h3>📝 Vincular Préstamo / Deuda del Banco</h3>
                     <form id="form-nuevo-prestamo" onsubmit="crearPrestamo(event)">
                         <div class="form-group">
-                            <label for="deuda-nombre">Nombre del Préstamo / Acreedor</label>
-                            <input type="text" id="deuda-nombre" placeholder="Ej. Préstamo Trabajo, Banco, Persona" required>
+                            <label for="deuda-nombre">Nombre del Banco / Tipo de Préstamo</label>
+                            <input type="text" id="deuda-nombre" placeholder="Ej. Préstamo Interbank, BCP, Caja" required>
                         </div>
                         <div class="form-group">
-                            <label for="deuda-total">Monto Total Prestado (S/)</label>
+                            <label for="deuda-total">Monto Total de la Deuda (S/)</label>
                             <input type="number" step="0.01" id="deuda-total" placeholder="0.00" required>
                         </div>
-                        <button type="submit" class="btn-primary btn-deuda">Registrar Deuda Total</button>
+                        <div class="form-group">
+                            <label for="deuda-cuota">Cuota Fija a Descontar Mensualmente (S/)</label>
+                            <input type="number" step="0.01" id="deuda-cuota" placeholder="Ej. 300.00" required>
+                        </div>
+                        <button type="submit" class="btn-primary btn-deuda">Registrar Deuda Bancaria</button>
                     </form>
                 </div>
 
                 <div class="card-form">
-                    <h3>💰 Registrar Abono de Cuota</h3>
+                    <h3>💰 Registrar Abono Manual</h3>
                     <form id="form-abonar-prestamo" onsubmit="abonarPrestamo(event)">
                         <div class="form-group">
-                            <label for="select-deuda-activa">Seleccionar Deuda Activa</label>
-                            <select id="select-deuda-activa" required>
-                                <option value="">-- Selecciona una deuda --</option>
-                            </select>
+                            <label for="select-deuda-activa">Seleccionar Préstamo</label>
+                            <select id="select-deuda-activa" required></select>
                         </div>
                         <div class="form-group">
-                            <label for="abono-monto">Monto a Abonar este mes (S/)</label>
+                            <label for="abono-monto">Monto de la Cuota (S/)</label>
                             <input type="number" step="0.01" id="abono-monto" placeholder="0.00" required>
                         </div>
                         <div class="form-group">
-                            <label for="abono-metodo">Método de Pago Utilizado</label>
+                            <label for="abono-metodo">¿Desde qué cuenta pagas?</label>
                             <select id="abono-metodo" required>
                                 <option value="Yape/Plin">📱 Yape / Plin</option>
-                                <option value="Tarjeta de Débito">💳 Tarjeta de Débito</option>
-                                <option value="Efectivo">💵 Efectivo</option>
+                                <option value="Tarjeta de Débito">💳 Cuenta de Banco</option>
                             </select>
                         </div>
-                        <button type="submit" class="btn-primary btn-abono">Registrar Pago de Cuota</button>
+                        <button type="submit" class="btn-primary btn-abono">Registrar Pago Manual</button>
                     </form>
                 </div>
             </div>
 
             <div class="card-reporte" style="margin-top: 20px;">
-                <h3>📋 Estado General de mis Préstamos</h3>
-                <div id="lista-prestamos-progreso">
-                    <!-- Se renderiza por JS -->
-                </div>
+                <h3>📋 Estado General de mis Préstamos con Bancos</h3>
+                <div id="lista-prestamos-progreso"></div>
             </div>
         </div>
     </main>
