@@ -1,4 +1,3 @@
-// Arreglos de Datos persistidos de LocalStorage
 let operaciones = JSON.parse(localStorage.getItem('tommy_operaciones')) || [];
 let limites = JSON.parse(localStorage.getItem('tommy_limites')) || {};
 let prestamos = JSON.parse(localStorage.getItem('tommy_prestamos')) || [];
@@ -34,7 +33,7 @@ function cambiarPestaña(pestana) {
     document.getElementById('pestaña-registrar').style.display = 'none';
     document.getElementById('pestaña-cuentas').style.display = 'none';
     document.getElementById('pestaña-deudas').style.display = 'none';
-    document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+    document.querySelectorAll('.pill-btn').forEach(btn => btn.classList.remove('active'));
 
     if (pestana === 'registrar') {
         document.getElementById('pestaña-registrar').style.display = 'block';
@@ -46,10 +45,11 @@ function cambiarPestaña(pestana) {
         document.getElementById('pestaña-deudas').style.display = 'block';
         actualizarModuloDeudas();
     }
+    
+    // Asignar estado activo al elemento que disparó el evento
     if(event && event.currentTarget) event.currentTarget.classList.add('active');
 }
 
-// Cálculo matemático inteligente desglosado por Cuentas y Billeteras reales
 function calcularGlobales() {
     let saldoYape = 0;
     let saldoBanco = 0;
@@ -72,14 +72,13 @@ function calcularGlobales() {
 
     const txtNeto = document.getElementById('txt-balance-neto');
     txtNeto.textContent = `S/ ${balanceTotal.toFixed(2)}`;
-    txtNeto.style.color = balanceTotal >= 0 ? '#2ed573' : '#ff4757';
+    txtNeto.style.color = balanceTotal >= 0 ? '#00ff66' : '#ff3838';
 
     document.getElementById('saldo-yape').textContent = `S/ ${saldoYape.toFixed(2)}`;
     document.getElementById('saldo-banco').textContent = `S/ ${saldoBanco.toFixed(2)}`;
     document.getElementById('saldo-efectivo').textContent = `S/ ${saldoEfectivo.toFixed(2)}`;
 }
 
-// Registro principal de operaciones
 function registrarOperacion(e) {
     e.preventDefault();
 
@@ -109,10 +108,9 @@ function registrarOperacion(e) {
     document.getElementById('form-operacion').reset();
     actualizarCategorias();
     calcularGlobales();
-    verificarLimitesAlerta(categoria);
+    verificarLimitsAlerta(categoria);
 }
 
-// Descuento automático acoplado al contador de cuotas
 function procesarDescuentoAutomaticoPrestamos(ingresoMonto, metodoPago) {
     let cuotasCobradas = 0;
     let mensajeDetalle = "";
@@ -125,12 +123,8 @@ function procesarDescuentoAutomaticoPrestamos(ingresoMonto, metodoPago) {
 
             p.montoPagado += montoADescontar;
             
-            if (p.cuotasPagadas < p.cuotasTotales) {
-                p.cuotasPagadas += 1;
-            }
-            if (p.montoPagado >= p.montoTotal) {
-                p.cuotasPagadas = p.cuotasTotales;
-            }
+            if (p.cuotasPagadas < p.cuotasTotales) p.cuotasPagadas += 1;
+            if (p.montoPagado >= p.montoTotal) p.cuotasPagadas = p.cuotasTotales;
 
             cuotasCobradas += montoADescontar;
 
@@ -155,13 +149,12 @@ function procesarDescuentoAutomaticoPrestamos(ingresoMonto, metodoPago) {
         const cajaAlerta = document.getElementById('alerta-automatica-cuota');
         if (cajaAlerta) {
             cajaAlerta.style.display = 'block';
-            cajaAlerta.innerHTML = `<strong>🤖 Asistente Financiero:</strong> Se detectó tu ingreso de Trabajo. Sistema cobró automáticamente tus cuotas: ${mensajeDetalle}`;
+            cajaAlerta.innerHTML = `<strong>🤖 Asistente Bancario:</strong> Sincronización de ingreso activa. Débito automático procesado: ${mensajeDetalle}`;
             setTimeout(() => { cajaAlerta.style.display = 'none'; }, 10000);
         }
     }
 }
 
-// MÓDULO DE PRÉSTAMOS CON SOPORTE PARA CUOTAS PREVIAS YA AMORTIZADAS
 function crearPrestamo(e) {
     e.preventDefault();
     const nombre = document.getElementById('deuda-nombre').value;
@@ -202,9 +195,7 @@ function abonarPrestamo(e) {
     const prestamo = prestamos.find(p => p.id === idPrestamo);
     if (prestamo) {
         prestamo.montoPagado += montoAbono;
-        if (prestamo.cuotasPagadas < prestamo.cuotasTotales) {
-            prestamo.cuotasPagadas += 1;
-        }
+        if (prestamo.cuotasPagadas < prestamo.cuotasTotales) prestamo.cuotasPagadas += 1;
         if (prestamo.montoPagado > prestamo.montoTotal) {
             prestamo.montoPagado = prestamo.montoTotal;
             prestamo.cuotasPagadas = prestamo.cuotasTotales;
@@ -240,7 +231,7 @@ function actualizarModuloDeudas() {
     lista.innerHTML = '';
 
     if (prestamos.length === 0) {
-        lista.innerHTML = '<p style="color: var(--color-muted); text-align: center;">No tienes préstamos vinculados con bancos.</p>';
+        lista.innerHTML = '<p style="color: var(--text-dim); text-align: center;">Sin créditos activos vinculados.</p>';
         return;
     }
 
@@ -264,22 +255,21 @@ function actualizarModuloDeudas() {
             <div class="deuda-info">
                 <strong>📌 ${p.nombre}</strong>
                 <span style="color: ${restante === 0 ? 'var(--neon-green)' : 'var(--neon-red)'}">
-                    ${restante === 0 ? '✅ ¡PAGADO!' : `Faltan pagar: ${cuotasRestantes} meses`}
+                    ${restante === 0 ? '✅ TOTALMENTE LIQUIDADO' : `Faltan: ${cuotasRestantes} meses`}
                 </span>
             </div>
             <div class="progress-bar-container">
                 <div class="progress-bar-fill" style="width: ${porcentaje}%"></div>
             </div>
             <div class="deuda-totales">
-                <span>🗓️ Cuotas: ${p.cuotasPagadas} de ${p.cuotasTotales} pagadas</span>
-                <span>S/ ${p.montoPagado.toFixed(2)} de S/ ${p.montoTotal.toFixed(2)}</span>
+                <span>🗓️ Cuotas: ${p.cuotasPagadas} de ${p.cuotasTotales} meses</span>
+                <span>S/ ${p.montoPagado.toFixed(2)} / S/ ${p.montoTotal.toFixed(2)}</span>
             </div>
         `;
         lista.appendChild(item);
     });
 }
 
-// Configuración de límites y reportes
 function establecerLimite(e) {
     e.preventDefault();
     const cat = document.getElementById('limite-categoria').value;
@@ -297,19 +287,19 @@ function renderizarLimitesUI() {
     for (let cat in limites) {
         const div = document.createElement('div');
         div.className = 'limite-alerta';
-        div.innerHTML = `🎯 Límite para <strong>${cat}</strong>: S/ ${limites[cat].toFixed(2)}`;
+        div.innerHTML = `🎯 Te pusiste un tope para <strong>${cat}</strong> de: S/ ${limites[cat].toFixed(2)}`;
         container.appendChild(div);
     }
 }
 
-function verificarLimitesAlerta(categoria) {
+function verificarLimitsAlerta(categoria) {
     if (!limites[categoria]) return;
     let totalGastado = 0;
     operaciones.forEach(op => {
         if(op.tipo === 'gasto' && op.categoria === categoria) totalGastado += op.monto;
     });
     if (totalGastado > limites[categoria]) {
-        alert(`⚠️ Has superado tu límite mensual en ${categoria}!`);
+        alert(`⚠️ ¡Tope excedido! Has gastado S/ ${totalGastado.toFixed(2)} en la categoría ${categoria}.`);
     }
 }
 
@@ -332,7 +322,7 @@ function renderizarHistorial(filtro) {
     });
 
     if(filtrados.length === 0) {
-        lista.innerHTML = '<p style="color: var(--color-muted); text-align:center; padding: 10px;">Sin movimientos.</p>';
+        lista.innerHTML = '<p style="color: var(--text-dim); text-align:center; padding: 15px;">Historial vacío para este filtro.</p>';
         return;
     }
 
@@ -345,7 +335,7 @@ function renderizarHistorial(filtro) {
                 <p>${op.categoria} • ${op.metodo} • 📅 ${op.fecha}</p>
             </div>
             <div class="mov-monto-box">
-                <span class="mov-monto" style="color: ${op.tipo === 'ingreso' ? '#2ed573' : '#ff4757'}">
+                <span class="mov-monto" style="color: ${op.tipo === 'ingreso' ? 'var(--neon-green)' : 'var(--neon-red)'}">
                     ${op.tipo === 'ingreso' ? '+' : '-'} S/ ${op.monto.toFixed(2)}
                 </span>
                 <button class="btn-delete" onclick="eliminarMovimiento('${op.id}')">✕</button>
@@ -356,7 +346,7 @@ function renderizarHistorial(filtro) {
 }
 
 function filtrarMovimientos(tipo, btn) {
-    document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+    document.querySelectorAll('.filter-pill').forEach(b => b.classList.remove('active'));
     btn.classList.add('active');
     renderizarHistorial(tipo);
 }
@@ -378,11 +368,13 @@ function renderizarDistribucion() {
     for (let cat in totalesPorCategoria) {
         const gastado = totalesPorCategoria[cat];
         const porcentaje = totalGastos > 0 ? ((gastado / totalGastos) * 100).toFixed(1) : 0;
+        const colorBarra = cat === 'Trabajo' ? 'var(--neon-purple)' : 'var(--neon-cyan)';
+        
         const barraHTML = document.createElement('div');
         barraHTML.className = 'barra-progreso';
         barraHTML.innerHTML = `
             <div class="barra-labels"><span>${cat}</span><span>S/ ${gastado.toFixed(2)} (${porcentaje}%)</span></div>
-            <div class="barra-fondo"><div class="barra-relleno" style="width: ${porcentaje}%; background-color: ${cat === 'Trabajo' ? '#9b5de5' : '#00d2d3'}"></div></div>
+            <div class="barra-fondo"><div class="barra-relleno" style="width: ${porcentaje}%; background-color: ${colorBarra}"></div></div>
         `;
         contenedor.appendChild(barraHTML);
     }
@@ -392,7 +384,7 @@ function exportarDatos() {
     const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify({operaciones, limites, prestamos}));
     const downloadAnchor = document.createElement('a');
     downloadAnchor.setAttribute("href", dataStr);
-    downloadAnchor.setAttribute("download", "TommyFinance_Bancos_Respaldo.json");
+    downloadAnchor.setAttribute("download", "TommyFinance_Pro_Backup.json");
     document.body.appendChild(downloadAnchor);
     downloadAnchor.click();
     downloadAnchor.remove();
@@ -412,10 +404,10 @@ function importarDatos(e) {
                 localStorage.setItem('tommy_prestamos', JSON.stringify(prestamos));
                 calcularGlobales();
                 renderizarLimitesUI();
-                alert("¡Datos sincronizados!");
+                alert("¡Base de datos sincronizada con éxito!");
                 cambiarPestaña('registrar');
             }
-        } catch (err) { alert("Archivo inválido."); }
+        } catch (err) { alert("Archivo JSON corrupto o inválido."); }
     };
     fileReader.readAsText(e.target.files[0]);
 }

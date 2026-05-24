@@ -1,103 +1,203 @@
+/* Variables de Diseño UI Premium */
 :root {
-    --bg-main: #121216;
-    --bg-card: #1e1e24;
-    --bg-input: #252530;
-    --color-text: #ffffff;
-    --color-muted: #a4b0be;
-    --neon-blue: #00d2d3;
-    --neon-green: #2ed573;
-    --neon-red: #ff4757;
-    --neon-purple: #9b5de5;
-    --neon-yellow: #ffa502;
+    --bg-dark-base: #0a0a0e;
+    --glass-bg: rgba(26, 26, 36, 0.65);
+    --glass-border: rgba(255, 255, 255, 0.06);
+    --text-white: #f1f2f6;
+    --text-dim: #95afc0;
+    
+    --neon-cyan: #00f5ff;
+    --neon-purple: #bd00ff;
+    --neon-green: #00ff66;
+    --neon-red: #ff3838;
+    --neon-gold: #ffb300;
 }
 
-* { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', sans-serif; }
-body { background-color: var(--bg-main); color: var(--color-text); padding-bottom: 40px; }
-header { background-color: var(--bg-card); padding: 15px 20px; border-bottom: 2px solid #2d2d3a; margin-bottom: 20px; }
+* { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', system-ui, sans-serif; }
+
+body {
+    background-color: var(--bg-dark-base);
+    color: var(--text-white);
+    overflow-x: hidden;
+    padding-bottom: 50px;
+}
+
+/* Esfera difuminada de fondo para dar profundidad */
+.glow-bg {
+    position: fixed;
+    top: -150px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 500px;
+    height: 500px;
+    background: radial-gradient(circle, rgba(189,0,255,0.15) 0%, rgba(0,245,255,0.05) 50%, rgba(0,0,0,0) 100%);
+    z-index: -1;
+    pointer-events: none;
+}
+
+/* Efecto Glassmorphism en el Header */
+.glass-header {
+    background: var(--glass-bg);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border-bottom: 1px solid var(--glass-border);
+    padding: 18px 20px;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+}
+
 .logo-container { display: flex; align-items: center; justify-content: space-between; max-width: 1200px; margin: 0 auto; }
-.badge { background-color: #2d2d3a; color: var(--neon-blue); padding: 5px 12px; border-radius: 20px; font-size: 0.85rem; font-weight: bold; }
-.container { max-width: 600px; margin: 0 auto; padding: 0 15px; }
 
-/* Tarjetas de balances */
-.balance-cards { margin-bottom: 12px; }
-.card { background-color: var(--bg-card); border-radius: 12px; padding: 18px; border: 1px solid #2d2d3a; border-left: 5px solid var(--neon-blue); }
-.card h4 { font-size: 0.8rem; color: var(--color-muted); letter-spacing: 1px; margin-bottom: 5px; }
-.card h2 { font-size: 2rem; }
-
-/* Grid de Bancos / Subcuentas */
-.bancos-cards {
-    display: grid;
-    grid-template-columns: 1fr 1fr 1fr;
-    gap: 8px;
-    margin-bottom: 20px;
+.gradient-text {
+    font-size: 1.4rem;
+    font-weight: 800;
+    background: linear-gradient(135deg, var(--neon-cyan), var(--neon-purple));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
 }
-.sub-card {
-    background-color: var(--bg-card);
-    padding: 10px;
-    border-radius: 8px;
-    border: 1px solid #2d2d3a;
+
+.badge-status {
+    background: rgba(0, 255, 102, 0.1);
+    color: var(--neon-green);
+    font-size: 0.75rem;
+    padding: 4px 10px;
+    border-radius: 20px;
+    font-weight: bold;
+    border: 1px solid rgba(0, 255, 102, 0.2);
+}
+
+.container { max-width: 550px; margin: 20px auto 0; padding: 0 15px; }
+
+/* Tarjetas Principales Modernas */
+.card-glass {
+    background: var(--glass-bg);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid var(--glass-border);
+    border-radius: 16px;
+    padding: 20px;
+    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+}
+
+.balance-main {
     text-align: center;
+    border-top: 2px solid var(--neon-cyan);
 }
-.sub-card p { font-size: 0.75rem; color: var(--color-muted); margin-bottom: 4px; }
-.sub-card h3 { font-size: 0.95rem; font-weight: bold; }
-.yape-box { border-bottom: 3px solid #a83294; }
-.banco-box { border-bottom: 3px solid var(--neon-blue); }
-.efectivo-box { border-bottom: 3px solid var(--neon-green); }
+.balance-main h4 { font-size: 0.75rem; color: var(--text-dim); letter-spacing: 1.5px; margin-bottom: 6px; }
+.balance-main h2 { font-size: 2.3rem; font-weight: 800; }
 
-/* Avisos del Asistente Automatizado */
-.alerta-cuota-automatica {
-    background-color: rgba(255, 165, 2, 0.15);
-    border: 1px dashed var(--neon-yellow);
-    color: var(--neon-yellow);
+/* Grid de distribución de billeteras */
+.bancos-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; margin: 12px 0 20px; }
+
+.sub-card-glass {
+    background: rgba(20, 20, 28, 0.5);
+    border: 1px solid var(--glass-border);
+    padding: 12px 8px;
+    border-radius: 12px;
+    text-align: center;
+    transition: transform 0.2s;
+}
+.sub-card-glass:hover { transform: translateY(-2px); }
+.sub-card-glass p { font-size: 0.7rem; color: var(--text-dim); margin-bottom: 4px; }
+.sub-card-glass h3 { font-size: 0.95rem; font-weight: bold; }
+
+.yape-theme { border-bottom: 2px solid #a83294; }
+.banco-theme { border-bottom: 2px solid var(--neon-cyan); }
+.efectivo-theme { border-bottom: 2px solid var(--neon-green); }
+
+/* Píldoras de navegación Modernas */
+.nav-pills { display: flex; background: rgba(20, 20, 28, 0.8); border-radius: 30px; padding: 4px; gap: 4px; margin-bottom: 20px; border: 1px solid var(--glass-border); }
+
+.pill-btn {
+    flex: 1;
+    background: none;
+    border: none;
+    color: var(--text-dim);
+    padding: 10px 5px;
+    border-radius: 25px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+.pill-btn i { margin-right: 4px; }
+.pill-btn.active { background: linear-gradient(135deg, rgba(0,245,255,0.15), rgba(189,0,255,0.15)); color: white; border: 1px solid rgba(0,245,255,0.2); }
+
+/* Cajas de inputs e inputs estilizados */
+.form-glass h3 { font-size: 1.1rem; margin-bottom: 15px; font-weight: 700; color: var(--text-white); border-bottom: 1px solid var(--glass-border); padding-bottom: 8px; }
+.input-box { margin-bottom: 14px; }
+.input-box label { display: block; font-size: 0.75rem; color: var(--text-dim); margin-bottom: 5px; text-transform: uppercase; letter-spacing: 0.5px; }
+
+.input-box input, .input-box select {
+    width: 100%;
+    background: rgba(10, 10, 14, 0.6);
+    border: 1px solid rgba(255,255,255,0.1);
+    color: white;
+    padding: 11px 12px;
+    border-radius: 8px;
+    font-size: 0.95rem;
+    transition: all 0.2s;
+}
+.input-box input:focus, .input-box select:focus {
+    outline: none;
+    border-color: var(--neon-cyan);
+    box-shadow: 0 0 10px rgba(0, 245, 255, 0.15);
+}
+
+/* Botones con degradados de neón */
+.btn-gradient {
+    width: 100%;
+    border: none;
     padding: 12px;
     border-radius: 8px;
-    margin-bottom: 15px;
-    font-size: 0.85rem;
-    line-height: 1.4;
+    font-size: 0.95rem;
+    font-weight: 700;
+    color: white;
+    cursor: pointer;
+    transition: filter 0.2s;
 }
+.btn-gradient:hover { filter: brightness(1.15); }
 
-/* Tabs de navegación */
-.nav-tabs { display: flex; gap: 8px; margin-bottom: 20px; }
-.tab-btn { flex: 1; background-color: var(--bg-card); color: var(--color-muted); border: 1px solid #2d2d3a; padding: 12px 5px; border-radius: 8px; cursor: pointer; font-weight: bold; font-size: 0.85rem; }
-.tab-btn.active { background-color: #2d2d3a; color: var(--color-text); border-bottom: 3px solid var(--neon-blue); }
+.action-blue { background: linear-gradient(135deg, var(--neon-cyan), #00a8ff); box-shadow: 0 4px 15px rgba(0, 245, 255, 0.2); }
+.action-red { background: linear-gradient(135deg, var(--neon-red), #ff6b81); box-shadow: 0 4px 15px rgba(255, 56, 56, 0.2); }
+.action-yellow { background: linear-gradient(135deg, var(--neon-gold), #ffa502); color: #0a0a0e !important; box-shadow: 0 4px 15px rgba(255, 179, 0, 0.2); }
 
-/* Contenedores y Formularios */
-.card-form, .card-reporte { background-color: var(--bg-card); border-radius: 12px; padding: 20px; border: 1px solid #2d2d3a; }
-.card-form h3, .card-reporte h3 { font-size: 1.1rem; margin-bottom: 12px; }
-.form-group { margin-bottom: 12px; }
-.form-group label { display: block; font-size: 0.8rem; color: var(--color-muted); margin-bottom: 4px; }
-.form-group input, .form-group select { width: 100%; background-color: var(--bg-input); border: 1px solid #3a3a4a; color: white; padding: 10px; border-radius: 6px; font-size: 0.95rem; }
-.btn-primary { width: 100%; background: linear-gradient(135deg, #00d2d3, #00a8ff); color: white; border: none; padding: 12px; border-radius: 6px; font-weight: bold; cursor: pointer; }
-.btn-secondary { width: 100%; background-color: #2d2d3a; color: white; border: 1px solid #3a3a4a; padding: 10px; border-radius: 6px; cursor: pointer; }
+.btn-dark-glow { width: 100%; background: #1a1a24; border: 1px solid rgba(255,255,255,0.1); color: white; padding: 10px; border-radius: 8px; cursor: pointer; font-weight: bold; }
 
-.grid-finance { display: grid; grid-template-columns: 1fr; gap: 20px; }
-.btn-deuda { background: linear-gradient(135deg, #ff4757, #ff6b81) !important; }
-.btn-abono { background: linear-gradient(135deg, #eccc68, #ffa502) !important; color: #121216 !important; }
+/* Alertas de procesamiento */
+.glass-alert { background: rgba(255, 179, 0, 0.1); border: 1px dashed var(--neon-gold); color: var(--neon-gold); padding: 12px; border-radius: 10px; margin-bottom: 15px; font-size: 0.8rem; line-height: 1.4; }
 
-/* Barras de progreso de deudas */
-.deuda-item { background: var(--bg-input); padding: 15px; border-radius: 8px; margin-bottom: 12px; border-left: 4px solid var(--neon-red); }
-.deuda-info { display: flex; justify-content: space-between; margin-bottom: 6px; font-size: 0.9rem; }
-.progress-bar-container { background: var(--bg-main); border-radius: 10px; height: 10px; width: 100%; overflow: hidden; }
-.progress-bar-fill { background: linear-gradient(90deg, var(--neon-green), #7bed9f); height: 100%; width: 0%; transition: width 0.4s; }
-.deuda-totales { display: flex; justify-content: space-between; font-size: 0.75rem; color: var(--color-muted); margin-top: 5px; }
-
-/* Distribución de barras */
+/* Barras e Historiales */
 .barra-progreso { margin-bottom: 12px; }
-.barra-labels { display: flex; justify-content: space-between; font-size: 0.8rem; margin-bottom: 4px; }
-.barra-fondo { background-color: var(--bg-main); height: 8px; border-radius: 4px; overflow: hidden; }
-.barra-relleno { background-color: var(--neon-purple); height: 100%; width: 0%; transition: width 0.3s; }
+.barra-labels { display: flex; justify-content: space-between; font-size: 0.8rem; margin-bottom: 4px; color: var(--text-dim); }
+.barra-fondo { background: rgba(0,0,0,0.4); height: 8px; border-radius: 10px; overflow: hidden; }
+.barra-relleno { height: 100%; transition: width 0.4s; }
 
-/* Lista de movimientos e Historial */
-.filtros-container { display: flex; gap: 5px; margin-bottom: 15px; }
-.filter-btn { background-color: var(--bg-input); border: none; color: var(--color-muted); padding: 6px 12px; border-radius: 4px; font-size: 0.75rem; cursor: pointer; }
-.filter-btn.active { background-color: #00a8ff; color: white; }
+.filter-pills { display: flex; gap: 6px; margin-bottom: 15px; }
+.filter-pill { background: rgba(255,255,255,0.05); border: none; color: var(--text-dim); padding: 6px 14px; border-radius: 20px; font-size: 0.75rem; cursor: pointer; }
+.filter-pill.active { background: var(--neon-cyan); color: #0a0a0e; font-weight: bold; }
 
-.movimiento-card { background-color: var(--bg-input); padding: 12px; border-radius: 8px; margin-bottom: 8px; display: flex; justify-content: space-between; align-items: center; }
-.mov-meta h5 { font-size: 0.9rem; }
-.mov-meta p { font-size: 0.75rem; color: var(--color-muted); }
+.scroll-lista { max-height: 280px; overflow-y: auto; padding-right: 4px; }
+.movimiento-card { background: rgba(255,255,255,0.03); padding: 12px; border-radius: 10px; margin-bottom: 8px; display: flex; justify-content: space-between; align-items: center; border: 1px solid rgba(255,255,255,0.02); }
+.mov-meta h5 { font-size: 0.9rem; font-weight: 600; }
+.mov-meta p { font-size: 0.75rem; color: var(--text-dim); margin-top: 2px; }
 .mov-monto { font-weight: bold; font-size: 0.95rem; }
-.btn-delete { background: none; border: none; color: #ff4757; cursor: pointer; font-size: 1rem; margin-left: 8px; }
+.btn-delete { background: none; border: none; color: var(--neon-red); cursor: pointer; font-size: 0.95rem; margin-left: 10px; }
 
-.limite-alerta { background-color: rgba(255, 165, 2, 0.1); border: 1px solid var(--neon-yellow); padding: 8px; border-radius: 6px; margin-top: 8px; font-size: 0.75rem; color: var(--neon-yellow); }
-.respaldo-actions { display: flex; gap: 10px; margin-top: 15px; }
-.btn-respaldo { flex: 1; background: none; border: 1px dashed var(--color-muted); color: var(--color-muted); padding: 10px; font-size: 0.75rem; border-radius: 6px; cursor: pointer; }
+/* Módulo de monitoreo de deudas */
+.deuda-item { background: rgba(255,255,255,0.03); padding: 15px; border-radius: 12px; margin-bottom: 12px; border-left: 4px solid var(--neon-red); }
+.deuda-info { display: flex; justify-content: space-between; font-size: 0.85rem; font-weight: 600; }
+.progress-bar-container { background: rgba(0,0,0,0.4); border-radius: 10px; height: 8px; width: 100%; overflow: hidden; margin: 8px 0; }
+.progress-bar-fill { background: linear-gradient(90deg, var(--neon-green), #55efc4); height: 100%; width: 0%; transition: width 0.5s; }
+.deuda-totales { display: flex; justify-content: space-between; font-size: 0.75rem; color: var(--text-dim); }
+
+.limite-alerta { background: rgba(255, 179, 0, 0.05); border: 1px solid rgba(255, 179, 0, 0.2); padding: 8px 12px; border-radius: 8px; margin-top: 8px; font-size: 0.75rem; color: var(--neon-gold); }
+.respaldo-grid { display: flex; gap: 8px; margin-top: 15px; }
+.btn-outline { flex: 1; background: none; border: 1px dashed rgba(255,255,255,0.15); color: var(--text-dim); padding: 10px; font-size: 0.75rem; border-radius: 8px; cursor: pointer; transition: all 0.2s; }
+.btn-outline:hover { border-color: var(--neon-cyan); color: white; }
+
+/* Scrollbar estética */
+::-webkit-scrollbar { width: 5px; }
+::-webkit-scrollbar-track { background: rgba(0,0,0,0.1); }
+::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 10px; }
